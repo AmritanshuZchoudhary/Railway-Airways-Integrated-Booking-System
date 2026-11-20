@@ -1,0 +1,16 @@
+const router = require('express').Router();
+const air = require('../controllers/airController');
+const admin = require('../controllers/airAdminController');
+const { verifyToken, requireAdmin } = require('../middleware/authMiddleware');
+router.get('/airports', verifyToken, air.listAirports);
+router.get('/flights/search', verifyToken, air.searchFlights);
+router.get('/bookings/my', verifyToken, air.myBookings);
+router.get('/bookings/probability', verifyToken, air.getStandbyProbability);
+router.post('/bookings/create', verifyToken, air.createBooking);
+router.post('/bookings/cancel', verifyToken, air.cancelBooking);
+router.post('/bookings/baggage', verifyToken, air.addBaggage);
+router.get('/admin/summary', verifyToken, requireAdmin, admin.getAirAdminSummary);
+router.post('/admin/finalize-history', verifyToken, requireAdmin, admin.finalizeStandbyHistory);
+router.get('/admin/schedule-options', verifyToken, requireAdmin, admin.getScheduleOptions);
+router.post('/admin/schedules', verifyToken, requireAdmin, admin.createSchedule);
+module.exports = router;
